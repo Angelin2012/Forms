@@ -1,71 +1,85 @@
-import { Formik, Form, Field } from "formik";
+import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 
-const EmployeeFeedbackForm = () => {
+const EmployeeRegistrationForm = () => {
   const initialValues = {
-    fullname: "",
+    fullName: "",
     email: "",
     department: "",
     rating: "",
     feedback: "",
   };
+
   const validationSchema = Yup.object({
     fullName: Yup.string()
-      .min(3, "Name must be at leaat 3 characters")
-      .required("full name is required"),
+      .min(3, "Name must be at least 3 characters")
+      .required("Full name is required"),
     email: Yup.string()
-      .email("Invalidate email format")
+      .email("Invalid email address")
       .required("Email is required"),
     department: Yup.string().required("Select a department"),
     rating: Yup.number()
       .min(1, "Minimum rating is 1")
       .max(5, "Maximum rating is 5")
       .required("Rating is required"),
-    feedback: Yup.string().max(200, "Feedback should be under 200 character"),
+    feedback: Yup.string().max(200, "Feedback should be under 200 characters"),
   });
 
   const handleSubmit = (values, { resetForm }) => {
     console.log("Form submitted:", values);
-    alert("Form Submitted successfully");
+    alert("Form submitted successfully");
     resetForm();
   };
 
   return (
     <div className="form-container">
-      <h1>Employee Feedback Form</h1>
-      <Formik initialValues={initialValues}>
+      <h2>Employee Feedback Form</h2>
+      <Formik
+        initialValues={initialValues}
+        validationSchema={validationSchema}
+        onSubmit={handleSubmit}
+      >
         <Form>
           <div>
-            <label> Full Name:</label>
-            <Field type="text" name="fullname" />
+            <label>Full Name:</label>
+            <Field type="text" name="fullName" />
+            <ErrorMessage name="fullName" component="div" className="errors" />
           </div>
+
           <div>
-            <label> Email:</label>
+            <label>Email:</label>
             <Field type="email" name="email" />
+            <ErrorMessage name="email" component="div" className="errors" />
           </div>
+
           <div>
-            <label> Department:</label>
+            <label>Department:</label>
             <Field as="select" name="department">
               <option value="">Select Department</option>
               <option value="HR">HR</option>
               <option value="Tech">Tech</option>
               <option value="Marketing">Marketing</option>
-              <option value="Engineering">Engineering</option>
-              <option value="Sales">Sales</option>
             </Field>
+            <ErrorMessage name="department" component="div" className="errors" />
           </div>
+
           <div>
-            <label> Rating(1-5):</label>
-            <Field type="number" name="rating" min="1" max="5" />
+            <label>Rating (1–5):</label>
+            <Field type="number" name="rating" />
+            <ErrorMessage name="rating" component="div" className="errors" />
           </div>
+
           <div>
-            <label> Feedback:</label>
+            <label>Feedback:</label>
             <Field as="textarea" name="feedback" />
+            <ErrorMessage name="feedback" component="div" className="errors" />
           </div>
-          <button type="submit">Submit</button>
+
+          <button type="submit">Submit Feedback</button>
         </Form>
       </Formik>
     </div>
   );
 };
-export default EmployeeFeedbackForm;
+
+export default EmployeeRegistrationForm;
